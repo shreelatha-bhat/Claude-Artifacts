@@ -58,7 +58,15 @@ Review the backend service or file: $ARGUMENTS
    - Pagination implemented for list endpoints
    - No verbs in endpoint paths (e.g. `/getUser` is wrong, `/users/{id}` is correct)
 
-10. **Mintlify Doc Comments**
+10. **Cost Optimisation (AWS)**
+    - Flag Lambda functions with over-allocated memory or timeouts set higher than needed
+    - Flag missing connection pooling — each Lambda must reuse DB connections (e.g. via `pg-pool`) not open a new one per invocation
+    - Flag SSM `getParameter` calls inside the handler function — must be cached at Lambda init (outside the handler)
+    - Flag missing API Gateway caching on GET endpoints that return stable data
+    - Flag verbose Pino log levels (debug/trace) left on in production — increases CloudWatch cost
+    - Flag any large payloads being passed between Lambda functions unnecessarily
+
+11. **Mintlify Doc Comments**
     - Flag any exported function, class, or interface missing a JSDoc/Mintlify comment
     - Suggest the comment if missing
 
